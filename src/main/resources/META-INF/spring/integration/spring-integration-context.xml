@@ -14,6 +14,18 @@
 
 	<context:component-scan base-package="com.plexiti.samples.tapas2go"/>
 
+    <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter-oauth -->
+    <context:property-placeholder location="classpath:twitter.properties"/>
+    <bean id="twitterTemplate" class="org.springframework.social.twitter.api.impl.TwitterTemplate">
+        <constructor-arg value="${twitter.oauth.consumerKey}"/>
+        <constructor-arg value="${twitter.oauth.consumerSecret}"/>
+        <constructor-arg value="${twitter.oauth.accessToken}"/>
+        <constructor-arg value="${twitter.oauth.accessTokenSecret}"/>
+    </bean>
+
+    <!-- Avoid duplicates. See http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter-inbound -->
+    <!--<bean id="metadataStore" class="org.springframework.integration.store.PropertiesPersistingMetadataStore"/>-->
+
 	<!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter -->
 	<int-twitter:search-inbound-channel-adapter
 		id="twitter" query="springsource OR springintegration OR cloudfoundry OR grails OR rabbitmq"
