@@ -33,11 +33,16 @@
         <int:poller fixed-rate="5000" max-messages-per-poll="5"/>
     </int-twitter:mentions-inbound-channel-adapter>
 
+    <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#outbound-twitter-update -->
+    <int-twitter:outbound-channel-adapter
+            twitter-template="twitterTemplate"
+            channel="twitterReplyChannel"/>
+
 	<!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#service-activator
 		http://www.eaipatterns.com/MessagingAdapter.html -->
 	<int:service-activator id="twitterServiceActivator"
-		input-channel="twitterChannel" output-channel="nullChannel" ref="twitterService"
-		method="addTwitterMessages" />
+		input-channel="twitterChannel" output-channel="twitterReplyChannel" ref="twitterService"
+		method="replyToTweet" />
 
 	<bean id="twitterService" class="com.plexiti.samples.tapas2go.service.impl.DefaultTwitterService"/>
 
@@ -52,6 +57,8 @@
 			<int:wire-tap channel="logger" />
 		</int:interceptors>
 	</int:channel>
+
+	<int:channel id="twitterReplyChannel" />
 
 	<int:channel id="controlBusChannel" />
 

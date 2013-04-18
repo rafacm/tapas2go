@@ -18,6 +18,7 @@ package com.plexiti.samples.tapas2go.service;
 import java.util.Collection;
 
 import com.plexiti.samples.tapas2go.model.TwitterMessage;
+import org.springframework.social.twitter.api.Tweet;
 
 /**
  * Provides some basic methods for controlling the flow of Twitter messages.
@@ -48,4 +49,5 @@ public interface TwitterService {
 	 */
 	void stopTwitterAdapter();
 
+    String replyToTweet(Tweet tweet);
 }

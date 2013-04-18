@@ -107,4 +107,7 @@ public class DefaultTwitterService implements TwitterService {
 			tweet.getProfileImageUrl()));
 	}
 
+    public String replyToTweet(Tweet tweet) {
+        return "@" + tweet.getFromUser() + " thanks for the order! " + tweet.getCreatedAt().toString();
+    }
 }
