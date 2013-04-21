@@ -1,5 +1,6 @@
 package com.plexiti.samples.tapas2go.service;
 
+import com.plexiti.samples.tapas2go.model.Tapa;
 import org.springframework.social.twitter.api.Tweet;
 
 /**
@@ -9,5 +10,6 @@ public interface BarService {
 
   public String todaysMenu(Tweet tweet);
   public String invalidRequest(Tweet tweet);
+  public Tapa prepareTapa(String tapaName);
 
 }

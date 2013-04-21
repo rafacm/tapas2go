@@ -5,6 +5,7 @@
        xmlns:int-twitter="http://www.springframework.org/schema/integration/twitter"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:bean="http://www.springframework.org/schema/beans"
+       xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
        xsi:schemaLocation="http://www.springframework.org/schema/integration
 		http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/beans
@@ -12,7 +13,9 @@
 		http://www.springframework.org/schema/integration/twitter
 		http://www.springframework.org/schema/integration/twitter/spring-integration-twitter.xsd
 		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+
+    <int:poller id="poller" default="true" fixed-delay="1000"/>
 
     <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#channel
     http://www.eaipatterns.com/MessageChannel.html -->
@@ -27,10 +30,14 @@
     <int:channel id="twitterOutChannel" />
 
     <!-- Avoid duplicates. See http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter-inbound -->
-    <!--<bean id="metadataStore" class="org.springframework.integration.store.PropertiesPersistingMetadataStore"/>-->
+    <bean id="metadataStore" class="org.springframework.integration.store.PropertiesPersistingMetadataStore"/>
 
     <bean id="twitterService" class="com.plexiti.samples.tapas2go.service.impl.DefaultTwitterService"/>
     <bean id="barService" class="com.plexiti.samples.tapas2go.service.impl.InitialBarService"/>
+    <bean id="orderService" class="com.plexiti.samples.tapas2go.service.impl.InitialOrderService"/>
+
+    <bean id="tweetToOrderTransformer" class="com.plexiti.samples.tapas2go.integration.TweetToOrderTransformer"/>
+    <bean id="orderSplitter" class="com.plexiti.samples.tapas2go.integration.OrderSplitter"/>
 
     <int:logging-channel-adapter id="logger"
                                  level="INFO"
@@ -55,6 +62,33 @@
                            ref="barService" method="todaysMenu" />
 
     <int:channel id="twitterOrdersChannel"/>
+    <int:channel id="twitterOrdersWithTwitterUserChannel"/>
+
+    <int:header-enricher input-channel="twitterOrdersChannel" output-channel="twitterOrdersWithTwitterUserChannel">
+        <int:header name="Twitter-User" expression="payload.getFromUser()"/>
+    </int:header-enricher>
+
+    <int:transformer ref="tweetToOrderTransformer"
+                     input-channel="twitterOrdersWithTwitterUserChannel" output-channel="ordersChannel"/>
+
+    <int:channel id="ordersChannel"/>
+
+    <int:splitter ref="orderSplitter" method="split"
+                  input-channel="ordersChannel" output-channel="orderItemsChannel"/>
+
+    <int:channel id="orderItemsChannel">
+        <int:queue capacity="10"/>
+    </int:channel>
+
+    <int:service-activator input-channel="orderItemsChannel" output-channel="tapasChannel"
+                           expression="@barService.prepareTapa(payload.getTapaName())" />
+
+    <int:channel id="tapasChannel">
+        <int:queue capacity="10"/>
+    </int:channel>
+
+    <int:transformer input-channel="tapasChannel" output-channel="twitterOutChannel"
+                     expression="'@' + headers.get('Twitter-User') + ' ' + payload.getName() + ': ' + payload.getDescription()"/>
 
     <int:channel id="twitterInvalidMessagesChannel"/>
 
