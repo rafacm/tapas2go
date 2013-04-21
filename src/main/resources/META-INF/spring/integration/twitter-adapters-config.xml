@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-twitter="http://www.springframework.org/schema/integration/twitter"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/integration
+		http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration/twitter
+		http://www.springframework.org/schema/integration/twitter/spring-integration-twitter.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter-oauth -->
+    <context:property-placeholder location="classpath:twitter.properties"/>
+
+    <bean id="twitterTemplate" class="org.springframework.social.twitter.api.impl.TwitterTemplate">
+        <constructor-arg value="${twitter.oauth.consumerKey}"/>
+        <constructor-arg value="${twitter.oauth.consumerSecret}"/>
+        <constructor-arg value="${twitter.oauth.accessToken}"/>
+        <constructor-arg value="${twitter.oauth.accessTokenSecret}"/>
+    </bean>
+
+    <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter -->
+    <int-twitter:mentions-inbound-channel-adapter
+            twitter-template="twitterTemplate"
+            channel="twitterInChannel">
+        <int:poller fixed-rate="5000" max-messages-per-poll="5"/>
+    </int-twitter:mentions-inbound-channel-adapter>
+
+    <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#outbound-twitter-update -->
+    <int-twitter:outbound-channel-adapter
+            twitter-template="twitterTemplate"
+            channel="twitterOutChannel"/>
+</beans>
