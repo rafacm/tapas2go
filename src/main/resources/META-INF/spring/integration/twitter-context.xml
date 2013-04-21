@@ -16,7 +16,13 @@
 
     <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#channel
     http://www.eaipatterns.com/MessageChannel.html -->
-    <int:channel id="twitterInChannel"/>
+    <int:channel id="twitterInChannel">
+        <!--<int:interceptors>-->
+            <!--<int:wire-tap channel="fullLogger" />-->
+        <!--</int:interceptors>-->
+    </int:channel>
+
+    <int:wire-tap pattern="*Channel" order="3" channel="fullLogger"/>
 
     <int:channel id="twitterOutChannel" />
 
@@ -38,7 +44,11 @@
 
     <int:router input-channel="twitterInChannel" ref="tweetRouter" method="routeIncomingTweet"/>
 
-    <int:channel id="twitterMenuChannel"/>
+    <int:channel id="twitterMenuChannel">
+        <int:interceptors>
+            <int:wire-tap channel="fullLogger" />
+        </int:interceptors>
+    </int:channel>
 
     <int:service-activator id="twitterMenuServiceActivator"
                            input-channel="twitterMenuChannel" output-channel="twitterOutChannel"
@@ -47,6 +57,10 @@
     <int:channel id="twitterOrdersChannel"/>
 
     <int:channel id="twitterInvalidMessagesChannel"/>
+
+    <int:service-activator id="twitterInvalidMessageServiceActivator"
+                           input-channel="twitterInvalidMessagesChannel" output-channel="twitterOutChannel"
+                           ref="barService" method="invalidRequest" />
 
     <int:channel id="controlBusChannel" />
 

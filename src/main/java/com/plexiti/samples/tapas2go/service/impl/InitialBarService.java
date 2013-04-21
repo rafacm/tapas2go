@@ -2,6 +2,7 @@ package com.plexiti.samples.tapas2go.service.impl;
 
 import com.plexiti.samples.tapas2go.model.Tapa;
 import com.plexiti.samples.tapas2go.service.BarService;
+import org.springframework.social.twitter.api.Tweet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,16 @@ public class InitialBarService implements BarService {
   }
 
   @Override
-  public String todaysMenu() {
-    return menu;
+  public String todaysMenu(Tweet tweet) {
+    return buildReplyForTweet(tweet, menu);
+  }
+
+  @Override
+  public String invalidRequest(Tweet tweet) {
+    return buildReplyForTweet(tweet, "Sorry but we cannot understand your requests! Your tweet should contain the words 'menu' or 'order'. Thanks!");
+  }
+
+  private String buildReplyForTweet(Tweet tweet, String msg) {
+    return "@" + tweet.getFromUser() + " " + msg;
   }
 }
