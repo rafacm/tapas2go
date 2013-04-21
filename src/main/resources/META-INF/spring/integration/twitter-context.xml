@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
        xmlns:int-twitter="http://www.springframework.org/schema/integration/twitter"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:bean="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/integration
 		http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/beans
@@ -14,24 +16,15 @@
 
     <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#channel
     http://www.eaipatterns.com/MessageChannel.html -->
-    <int:channel id="twitterInChannel">
-        <int:interceptors>
-            <int:wire-tap channel="fullLogger" />
-        </int:interceptors>
-    </int:channel>
+    <int:channel id="twitterInChannel"/>
 
     <int:channel id="twitterOutChannel" />
 
     <!-- Avoid duplicates. See http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter-inbound -->
     <!--<bean id="metadataStore" class="org.springframework.integration.store.PropertiesPersistingMetadataStore"/>-->
 
-    <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#service-activator
-        http://www.eaipatterns.com/MessagingAdapter.html -->
-    <int:service-activator id="twitterServiceActivator"
-                           input-channel="twitterInChannel" output-channel="twitterOutChannel" ref="twitterService"
-                           method="replyToTweet" />
-
     <bean id="twitterService" class="com.plexiti.samples.tapas2go.service.impl.DefaultTwitterService"/>
+    <bean id="barService" class="com.plexiti.samples.tapas2go.service.impl.InitialBarService"/>
 
     <int:logging-channel-adapter id="logger"
                                  level="INFO"
@@ -41,10 +34,23 @@
                                  level="INFO"
                                  log-full-message="true"/>
 
+    <bean:bean id="tweetRouter" class="com.plexiti.samples.tapas2go.integration.TweetRouter"/>
+
+    <int:router input-channel="twitterInChannel" ref="tweetRouter" method="routeIncomingTweet"/>
+
+    <int:channel id="twitterMenuChannel"/>
+
+    <int:service-activator id="twitterMenuServiceActivator"
+                           input-channel="twitterMenuChannel" output-channel="twitterOutChannel"
+                           ref="barService" method="todaysMenu" />
+
+    <int:channel id="twitterOrdersChannel"/>
+
+    <int:channel id="twitterInvalidMessagesChannel"/>
+
     <int:channel id="controlBusChannel" />
 
     <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#control-bus
         http://www.eaipatterns.com/ControlBus.html -->
     <int:control-bus id="controlBus" input-channel="controlBusChannel" />
-
 </beans>

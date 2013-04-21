@@ -16,6 +16,7 @@
 package com.plexiti.samples.tapas2go.service.impl;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -108,6 +109,6 @@ public class DefaultTwitterService implements TwitterService {
 	}
 
     public String replyToTweet(Tweet tweet) {
-        return "@" + tweet.getFromUser() + " thanks for the order! " + tweet.getCreatedAt().toString();
+        return "@" + tweet.getFromUser() + " thanks for the order! " + (new Date()).toString();
     }
 }

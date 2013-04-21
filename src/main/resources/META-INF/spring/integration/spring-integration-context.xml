@@ -12,7 +12,9 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="com.plexiti.samples.tapas2go"/>
+    <int:annotation-config/>
+
+    <context:component-scan base-package="com.plexiti.samples.tapas2go"/>
 
     <import resource="classpath:META-INF/spring/integration/twitter-adapters-config.xml"/>
     <import resource="classpath:META-INF/spring/integration/twitter-context.xml"/>
