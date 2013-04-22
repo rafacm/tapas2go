@@ -33,9 +33,6 @@
 
     <int:channel id="twitterOutChannel" />
 
-    <!-- Avoid duplicates. See http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter-inbound -->
-    <bean id="metadataStore" class="org.springframework.integration.store.PropertiesPersistingMetadataStore"/>
-
     <bean id="twitterService" class="com.plexiti.samples.tapas2go.service.impl.DefaultTwitterService"/>
 
     <bean id="tweetToOrderTransformer" class="com.plexiti.samples.tapas2go.integration.TweetToOrderTransformer"/>
@@ -44,20 +41,23 @@
 
     <int:router input-channel="tweetsWithUserChannel" ref="tweetRouter" method="routeIncomingTweet"/>
 
-    <int:channel id="twitterMenuChannel"/>
+    <int:channel id="twitterMenuRequestChannel"/>
 
-    <int:service-activator id="twitterMenuServiceActivator"
-                           input-channel="twitterMenuChannel" output-channel="twitterOutChannel"
+    <int:service-activator input-channel="twitterMenuRequestChannel" output-channel="twitterMenuReplyChannel"
                            ref="barService" method="todaysMenu" />
 
-    <int:channel id="twitterOrdersChannel"/>
+    <int:channel id="twitterMenuReplyChannel"/>
 
-    <int:transformer input-channel="twitterOrdersChannel" output-channel="ordersChannel"
+    <int:transformer input-channel="twitterMenuReplyChannel" output-channel="twitterOutChannel"
+                     expression="'@' + headers.get('Twitter-User') + ' ' + payload"/>
+
+    <int:channel id="twitterOrderRequestChannel"/>
+
+    <int:transformer input-channel="twitterOrderRequestChannel" output-channel="ordersChannel"
                      expression="@tweetToOrderTransformer.transform(payload.text)"/>
 
-    <int:channel id="twitterInvalidMessagesChannel"/>
+    <int:channel id="twitterInvalidRequestChannel"/>
 
-    <int:service-activator id="twitterInvalidMessageServiceActivator"
-                           input-channel="twitterInvalidMessagesChannel" output-channel="twitterOutChannel"
-                           ref="barService" method="invalidRequest" />
+    <int:transformer input-channel="twitterInvalidRequestChannel" output-channel="twitterOutChannel"
+                     expression="'@' + headers.get('Twitter-User') + ' Ups! Your tweet must contain the words menu or order tapa_name tapa_name'"/>
 </beans>

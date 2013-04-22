@@ -6,13 +6,13 @@ public class TweetRouter {
 
   public String routeIncomingTweet(Tweet tweet) {
     if (tweet.getText().contains("menu")) {
-      return "twitterMenuChannel";
+      return "twitterMenuRequestChannel";
     }
 
     if (tweet.getText().contains("order")) {
-      return "twitterOrdersChannel";
+      return "twitterOrderRequestChannel";
     }
 
-    return "twitterInvalidMessagesChannel";
+    return "twitterInvalidRequestChannel";
   }
 }

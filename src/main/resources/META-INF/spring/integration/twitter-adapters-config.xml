@@ -33,4 +33,8 @@
     <int-twitter:outbound-channel-adapter
             twitter-template="twitterTemplate"
             channel="twitterOutChannel"/>
+
+    <!-- Avoid duplicates. See http://static.springsource.org/spring-integration/reference/htmlsingle/#twitter-inbound -->
+    <bean id="metadataStore" class="org.springframework.integration.store.PropertiesPersistingMetadataStore"/>
+
 </beans>

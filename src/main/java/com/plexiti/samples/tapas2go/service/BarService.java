@@ -8,7 +8,6 @@ import org.springframework.social.twitter.api.Tweet;
  */
 public interface BarService {
 
-  public String todaysMenu(Tweet tweet);
+  public String todaysMenu();
   public Tapa prepareTapa(String tapaName);
-  public String invalidRequest(Tweet tweet);
 }

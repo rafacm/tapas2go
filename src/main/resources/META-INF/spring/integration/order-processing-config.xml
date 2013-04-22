@@ -31,19 +31,14 @@
         </int:interceptors>
     </int:channel>
 
-    <int:service-activator input-channel="orderItemsChannel" output-channel="tapasChannel"
+    <int:service-activator input-channel="orderItemsChannel" output-channel="preparedTapasChannel"
                            expression="@barService.prepareTapa(payload.tapaName)" />
 
-    <int:channel id="tapasChannel">
+    <int:channel id="preparedTapasChannel">
         <int:queue capacity="10"/>
     </int:channel>
 
-    <int:transformer input-channel="tapasChannel" output-channel="twitterOutChannel"
+    <int:transformer input-channel="preparedTapasChannel" output-channel="twitterOutChannel"
                      expression="'@' + headers.get('Twitter-User') + ' ' + payload.name + ': ' + payload.description"/>
 
-    <int:channel id="twitterInvalidMessagesChannel"/>
-
-    <int:service-activator id="twitterInvalidMessageServiceActivator"
-                           input-channel="twitterInvalidMessagesChannel" output-channel="twitterOutChannel"
-                           ref="barService" method="invalidRequest" />
 </beans>

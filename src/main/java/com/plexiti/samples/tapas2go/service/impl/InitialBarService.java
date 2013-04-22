@@ -26,19 +26,11 @@ public class InitialBarService implements BarService {
   }
 
   @Override
-  public String todaysMenu(Tweet tweet) {
-    return buildReplyForTweet(tweet, menu);
+  public String todaysMenu() {
+    return menu;
   }
 
   @Override
-  public String invalidRequest(Tweet tweet) {
-    return buildReplyForTweet(tweet, "Sorry but we cannot understand your request! Your tweet should contain the words 'menu' or 'order <tapa name> <tapa name>'. Thanks!");
-  }
-
-  private String buildReplyForTweet(Tweet tweet, String msg) {
-    return "@" + tweet.getFromUser() + " " + msg;
-  }
-
   public Tapa prepareTapa(String tapaName) {
     return availableTapas.get(tapaName);
   }
