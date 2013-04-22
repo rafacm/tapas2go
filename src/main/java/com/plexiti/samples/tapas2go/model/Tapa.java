@@ -9,13 +9,15 @@ public class Tapa {
 
   private String name;
   private String description;
+  private String imageUrl;
 
   // Default constructor required by Jackson Java JSON-processor
   public Tapa() {}
 
-  public Tapa(String name, String description) {
+  public Tapa(String name, String description, String imageUrl) {
     this.name = name;
     this.description = description;
+    this.imageUrl = imageUrl;
   }
 
   public String getName() {
@@ -34,11 +36,20 @@ public class Tapa {
     this.description = description;
   }
 
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
   @Override
   public String toString() {
-    return "Tapa {" +
+    return "Tapa{" +
       "name='" + name + '\'' +
       ", description='" + description + '\'' +
+      ", imageUrl='" + imageUrl + '\'' +
       '}';
   }
 }

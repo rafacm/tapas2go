@@ -39,6 +39,6 @@
     </int:channel>
 
     <int:transformer input-channel="preparedTapasChannel" output-channel="twitterOutChannel"
-                     expression="'@' + headers.get('Twitter-User') + ' ' + payload.name + ': ' + payload.description"/>
+                     expression="'@' + headers.get('Twitter-User') + ' ' + payload.name + ': ' + payload.description + ' ' + payload.imageUrl"/>
 
 </beans>
