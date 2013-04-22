@@ -32,7 +32,7 @@ public class InitialBarService implements BarService {
 
   @Override
   public String invalidRequest(Tweet tweet) {
-    return buildReplyForTweet(tweet, "Sorry but we cannot understand your requests! Your tweet should contain the words 'menu' or 'order'. Thanks!");
+    return buildReplyForTweet(tweet, "Sorry but we cannot understand your request! Your tweet should contain the words 'menu' or 'order <tapa name> <tapa name>'. Thanks!");
   }
 
   private String buildReplyForTweet(Tweet tweet, String msg) {

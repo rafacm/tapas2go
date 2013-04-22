@@ -16,6 +16,17 @@
 
     <context:component-scan base-package="com.plexiti.samples.tapas2go"/>
 
+    <int:poller id="poller" default="true" fixed-delay="1000"/>
+
     <import resource="classpath:META-INF/spring/integration/twitter-adapters-config.xml"/>
     <import resource="classpath:META-INF/spring/integration/twitter-context.xml"/>
+    <import resource="classpath:META-INF/spring/integration/order-processing-config.xml"/>
+    <import resource="classpath:META-INF/spring/integration/logging-config.xml"/>
+
+    <int:channel id="controlBusChannel" />
+
+    <!-- See also: http://static.springsource.org/spring-integration/reference/htmlsingle/#control-bus
+        http://www.eaipatterns.com/ControlBus.html -->
+    <int:control-bus id="controlBus" input-channel="controlBusChannel" />
+
 </beans>

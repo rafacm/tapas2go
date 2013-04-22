@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-twitter="http://www.springframework.org/schema/integration/twitter"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:bean="http://www.springframework.org/schema/beans"
+       xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+       xsi:schemaLocation="http://www.springframework.org/schema/integration
+		http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration/twitter
+		http://www.springframework.org/schema/integration/twitter/spring-integration-twitter.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+
+    <bean id="barService" class="com.plexiti.samples.tapas2go.service.impl.InitialBarService"/>
+    <bean id="orderService" class="com.plexiti.samples.tapas2go.service.impl.InitialOrderService"/>
+    <bean id="orderSplitter" class="com.plexiti.samples.tapas2go.integration.OrderSplitter"/>
+
+    <int:channel id="ordersChannel"/>
+
+    <int:splitter ref="orderSplitter" method="split"
+                  input-channel="ordersChannel" output-channel="orderItemsChannel"/>
+
+    <int:channel id="orderItemsChannel">
+        <int:queue capacity="10"/>
+        <int:interceptors>
+            <int:wire-tap channel="orderItemLogger" />
+        </int:interceptors>
+    </int:channel>
+
+    <int:service-activator input-channel="orderItemsChannel" output-channel="tapasChannel"
+                           expression="@barService.prepareTapa(payload.tapaName)" />
+
+    <int:channel id="tapasChannel">
+        <int:queue capacity="10"/>
+    </int:channel>
+
+    <int:transformer input-channel="tapasChannel" output-channel="twitterOutChannel"
+                     expression="'@' + headers.get('Twitter-User') + ' ' + payload.name + ': ' + payload.description"/>
+
+    <int:channel id="twitterInvalidMessagesChannel"/>
+
+    <int:service-activator id="twitterInvalidMessageServiceActivator"
+                           input-channel="twitterInvalidMessagesChannel" output-channel="twitterOutChannel"
+                           ref="barService" method="invalidRequest" />
+</beans>

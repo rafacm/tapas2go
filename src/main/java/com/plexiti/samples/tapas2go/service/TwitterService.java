@@ -49,5 +49,4 @@ public interface TwitterService {
 	 */
 	void stopTwitterAdapter();
 
-    String replyToTweet(Tweet tweet);
 }
