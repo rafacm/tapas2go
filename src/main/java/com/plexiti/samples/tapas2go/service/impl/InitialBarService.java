@@ -2,11 +2,7 @@ package com.plexiti.samples.tapas2go.service.impl;
 
 import com.plexiti.samples.tapas2go.model.Tapa;
 import com.plexiti.samples.tapas2go.service.BarService;
-import org.springframework.social.twitter.api.Tweet;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class InitialBarService implements BarService {
