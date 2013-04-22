@@ -1,1 +1,11 @@
-!.settings
+/target
+/*.iml
+/*.ipr
+/*.iws
+/.idea
+/.classpath
+/.project
+/.settings
+nbproject
+**/.DS_Store
+**/node_modules
