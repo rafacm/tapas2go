@@ -1,27 +1,14 @@
-Spring Integration - War Template
-================================================================================
+Tapas2Go - A Tapas as a Service!
+================================
 
-This template is meant for running Spring Integration inside of an Servlet
-Container. This template by default uses Twitter Integration to show some basic
-functionality.
+Tapas2Go is a web application built with the aim to showcase the [camunda BPM Platform](http://www.camunda.org) and the
+[Sping Integration](http://www.springsource.org/spring-integration) framework. It's a new rendition of the [Widgets & Gadgets ‘R Us (WGRUS)](http://www.eaipatterns.com/Chapter1.html) example
+described on the ["Enterprise Integration Patterns"](http://www.eaipatterns.com/eaipatterns.html) book with a Spanish touch.
 
-Please keep in mind, that the provided Web UI is not necessary. You can in fact
-run Spring Integration processes without any MVC integration. Thus, you can
-run your Spring Integration components as mere backend processes.
+![Tapas in Barcelona][1]
 
-You can run the application from:
+# Warning!
 
-* within STS (Right-click on the WAR project --> Run As --> Run on Server)
-* the command line:
-	- `mvn tomcat7:run`
-	- Open your browser at `http://localhost:8080/`
-* or alternatively:
-	- `mvn package`
-	- deploy the created war file (under `/target/*.war`) to a Servlet Container such as Tomcat
+This app is under heavy development at the moment! Check back soon for updates!
 
---------------------------------------------------------------------------------
-
-For help please take a look at the Spring Integration documentation:
-
-http://www.springsource.org/spring-integration
-
+[1]: http://upload.wikimedia.org/wikipedia/commons/thumb/4/46/TapasenBarcelona.JPG/800px-TapasenBarcelona.JPG
