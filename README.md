@@ -15,7 +15,8 @@ the [Widgets & Gadgets ‘R Us (WGRUS)](http://www.eaipatterns.com/Chapter1.html
 2. Send a tweet to [@Tapas2Go](https://twitter.com/Tapas2Go) mentioning the word "menu"
 3. To order something tweet as follows, for example, `@Tapas2Go oder tortilla calamares`
 
-Please note that the first time you run this application, your *local* app will process
+Please note that the first time you run this application, your *local* app will process all tweets mentioning @Tapas2Go.
+We will fix this ASAP.
 
 # Warning!
 
