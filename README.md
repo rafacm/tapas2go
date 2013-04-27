@@ -18,8 +18,13 @@ the [Widgets & Gadgets ‘R Us (WGRUS)](http://www.eaipatterns.com/Chapter1.html
 Please note that the first time you run this application, your *local* app will process all tweets mentioning @Tapas2Go.
 We will fix this ASAP.
 
+# Credits
+
+* [Tapas]() pictures are links to Wikipedia resources: [http://en.wikipedia.org/wiki/Tapas](http://en.wikipedia.org/wiki/Tapas)
+* The initial project was generated with the [Spring Tool Suite](http://www.springsource.org/sts): `New -> String Template Project -> Itegration -> Spring Integration Project (WAR)`
+
 # Warning!
 
-This app is under heavy development at the moment! Check back soon for updates!
+This project is work in progress and was created for a demo at the [BarcelonaJUG](http://www.barcelonajug.org). Expect changes!
 
 [1]: http://upload.wikimedia.org/wikipedia/commons/thumb/4/46/TapasenBarcelona.JPG/800px-TapasenBarcelona.JPG
